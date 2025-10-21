@@ -1,0 +1,262 @@
+{
+  "name": "prep731Base",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "etl.flat_prep_summary_v1_1",
+      "alias": "fps"
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "fps.person_id"
+    },
+    {
+      "type": "simple_column",
+      "alias": "encounter_datetime",
+      "column": "fps.encounter_datetime"
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_female_general_pop",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.population_type = 3  and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_male_general_pop",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.population_type = 3  and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_msm",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and (fps.sub_population_type = 2 || fps.sub_population_type = 1) and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_fsw",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 3 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_pwud_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(gender = 'M' and fps.sub_population_type = 4 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_pwud_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 4 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_discordant_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.population_type = 1 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_discordant_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.sub_population_type = 4 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_vulnerable_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(gender = 'F' and fps.sub_population_type = 8 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_vulnerable_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(gender = 'F' and fps.sub_population_type = 8 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_ayp",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 11 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_new_preg_breastfeeding",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 9 and fps.encounter_type = 133, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_female_general_pop",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.population_type = 3  and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_male_general_pop",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.population_type = 3  and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_msm",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and (fps.sub_population_type = 2 || fps.sub_population_type = 1) and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_fsw",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 3 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_pwud_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.sub_population_type = 4 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_pwud_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 4 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_discordant_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.population_type = 1 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_discordant_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.population_type = 1 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_vulnerable_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 8 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_vulnerable_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.sub_population_type = 8 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_ayp",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 11 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "prep_sti_preg_breastfeeding",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.sub_population_type = 9 and fps.has_sti = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "seroconverted_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'F' and fps.turned_positive = 1, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "seroconverted_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(fps.gender = 'M' and fps.turned_positive = 1, 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "fps.encounter_datetime >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "fps.encounter_datetime <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "fps.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "orderBy": {
+    "orderByParam": "orderByParam",
+    "columns": [
+      {
+        "column": "fps.encounter_datetime",
+        "order": "desc"
+      }
+    ]
+  }
+}

@@ -81,6 +81,7 @@ import { getPatientCovidVaccinationStatus } from './service/covid-19/covid-19-va
 import { Covid19MonthlyReport } from './service/covid-19/covid-19-monthly-report';
 import { getPatientPredictedScore } from './service/predictions/ml-prediction-service';
 import { CohortModuleService } from './app/otz/cohort-module.service';
+import { MOH731Service } from './service/moh-731.service.js';
 const {
   default: MlWeeklyPredictionsService
 } = require('./service/ml-weekly-predictions.service');
@@ -2857,6 +2858,63 @@ module.exports = (function () {
               .optional()
               .description('Validates which report should be returned')
           }
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/etl/moh-731',
+      config: {
+        auth: 'simple',
+        handler: function (request, reply) {
+          if (request.query.locationUuids) {
+            preRequest.resolveLocationIdsToLocationUuids(request, function () {
+              let requestParams = Object.assign(
+                {},
+                request.query,
+                request.params
+              );
+              let reportParams = etlHelpers.getReportParams(
+                'moh731Report',
+                ['endDate', 'startDate', 'locationUuids'],
+                requestParams
+              );
+
+              reportParams.requestParams.isAggregated = true;
+
+              let moh731Service = new MOH731Service(
+                'moh731Report',
+                reportParams.requestParams
+              );
+
+              console.log(
+                'PARAMS ARE: ' + JSON.stringify(reportParams.requestParams)
+              );
+
+              moh731Service
+                .generateReport(reportParams.requestParams)
+                .then((result) => {
+                  reply(result);
+                })
+                .catch((error) => {
+                  reply(error);
+                });
+            });
+          }
+        },
+        plugins: {
+          hapiAuthorization: {
+            role: privileges.canViewClinicDashBoard
+          }
+        },
+        description: 'Get MOH 731 REPORT',
+        notes: 'Returns MOH 731 Report',
+        tags: ['api'],
+        validate: {
+          options: {
+            allowUnknown: true
+          },
+          params: {}
         }
       }
     },

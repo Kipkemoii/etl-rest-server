@@ -1,0 +1,73 @@
+{
+  "name": "establishedAggregate",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [
+    {
+      "name": "establishedBase",
+      "version": "1.0",
+      "type": "dataset_def"
+    }
+  ],
+  "sources": [
+    {
+      "dataSet": "establishedBase",
+      "alias": "e"
+    }
+  ],
+  "columns": [
+    {
+      "type": "derived_column",
+      "alias": "established",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.established)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "not_established",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.not_established)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "community",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.community)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "facility",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.facility)"
+      }
+    }
+  ],
+  "transFormDirectives": {
+    "joinColumn": "location_id",
+    "joinColumnParam": "",
+    "skipColumns": [""],
+    "disaggregationColumns": []
+  },
+  "dynamicJsonQueryGenerationDirectives": {
+    "patientListGenerator": {
+      "useTemplate": "patient-list-template",
+      "useTemplateVersion": "1.0",
+      "generatingDirectives": {
+        "joinDirectives": {
+          "joinType": "INNER",
+          "joinCondition": "<<base_column>> = <<template_column>>",
+          "baseColumn": "person_id",
+          "templateColumn": "person_id"
+        }
+      }
+    }
+  }
+}

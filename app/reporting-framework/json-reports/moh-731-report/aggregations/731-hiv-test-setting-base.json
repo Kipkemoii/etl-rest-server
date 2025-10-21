@@ -1,0 +1,103 @@
+{
+  "name": "hivSetting731Base",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "amrs.obs",
+      "alias": "ob"
+    },
+    {
+      "table": "amrs.person",
+      "alias": "p",
+      "join": {
+        "type": "LEFT",
+        "joinCondition": "ob.person_id = p.person_id"
+      }
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "ob.person_id"
+    },
+    {
+      "type": "simple_column",
+      "alias": "location_id",
+      "column": "ob.location_id"
+    },
+    {
+      "type": "derived_column",
+      "alias": "hiv_setting_community",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 11873 AND ob.value_coded = 9613, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "hiv_setting_facility",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 11873 AND  ob.value_coded = 6708, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "tested_kvp",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 9782 AND  ob.value_coded = 12251, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "hiv_male",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(p.gender = 'M', 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "hiv_female",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(p.gender = 'F', 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.concept_id in (11873, 9782)",
+        "parameterName": ""
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "groupBy": {
+    "groupParam": "groupByParam",
+    "columns": ["ob.person_id", "ob.concept_id"],
+    "excludeParam": "excludeParam"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "breastFeeding731Aggregate",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [
+    {
+      "name": "breastFeeding731Base",
+      "version": "1.0",
+      "type": "dataset_def"
+    }
+  ],
+  "sources": [
+    {
+      "dataSet": "breastFeeding731Base",
+      "alias": "e"
+    }
+  ],
+  "columns": [
+    {
+      "type": "derived_column",
+      "alias": "exclusive_bf",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.exclusive_bf AND e.age_less_or_equal_6_months)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "bf",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.bf AND e.age_greater_or_equal_6_months)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "weaning",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "SUM(e.weaning AND e.age_greater_or_equal_6_months)"
+      }
+    }
+  ],
+  "transFormDirectives": {
+    "joinColumn": "location_id",
+    "joinColumnParam": "",
+    "skipColumns": [""],
+    "disaggregationColumns": []
+  },
+  "dynamicJsonQueryGenerationDirectives": {
+    "patientListGenerator": {
+      "useTemplate": "patient-list-template",
+      "useTemplateVersion": "1.0",
+      "generatingDirectives": {
+        "joinDirectives": {
+          "joinType": "INNER",
+          "joinCondition": "<<base_column>> = <<template_column>>",
+          "baseColumn": "person_id",
+          "templateColumn": "person_id"
+        }
+      }
+    }
+  }
+}

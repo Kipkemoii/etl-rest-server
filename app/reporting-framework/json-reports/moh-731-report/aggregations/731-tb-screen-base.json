@@ -1,0 +1,65 @@
+{
+  "name": "tbScreen731Base",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "etl.hiv_monthly_report_dataset_frozen",
+      "alias": "hmrd"
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "hmrd.person_id"
+    },
+    {
+      "type": "derived_column",
+      "alias": "screened_tb_less_15",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(hmrd.tb_screen = 1 AND hmrd.age between 0 and 15, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "screened_tb_greater_15",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(hmrd.tb_screen = 1 AND hmrd.age >= 15, 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "hmrd.encounter_date >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "hmrd.encounter_date <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "hmrd.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "orderBy": {
+    "orderByParam": "orderByParam",
+    "columns": [
+      {
+        "column": "encounter_date",
+        "order": "desc"
+      }
+    ]
+  }
+}

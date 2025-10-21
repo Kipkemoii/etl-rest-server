@@ -1,0 +1,122 @@
+{
+  "name": "tptTbBase",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "amrs.obs",
+      "alias": "ob"
+    },
+    {
+      "table": "amrs.person",
+      "alias": "p",
+      "join": {
+        "type": "LEFT",
+        "joinCondition": "ob.person_id = p.person_id"
+      }
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "ob.person_id"
+    },
+    {
+      "type": "derived_column",
+      "alias": "start_tpt",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 1261 AND ob.value_coded = 1256, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "start_tb",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 1265 AND ob.value_coded = 1256, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "age_less_15",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(TIMESTAMPDIFF(YEAR, p.birthdate, CURDATE()) <= 15, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "age_greater_15",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(TIMESTAMPDIFF(YEAR, p.birthdate, CURDATE()) >= 15, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "known_positive",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 6709 AND ob.value_coded = 10407, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "positive",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 6709 AND ob.value_coded = 703, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "start_art",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 1255 AND ob.value_coded = 1256, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "on_art",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.concept_id = 1255 AND ob.value_coded = 1257, 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.concept_id in (1261, 1265, 6709, 1255)",
+        "parameterName": ""
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "groupBy": {
+    "groupParam": "groupByParam",
+    "columns": ["ob.person_id", "ob.concept_id"],
+    "excludeParam": "excludeParam"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "name": "establishedBase",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "amrs.obs",
+      "alias": "ob"
+    },
+    {
+      "table": "amrs.location",
+      "alias": "al",
+      "join": {
+        "type": "LEFT",
+        "joinCondition": "ob.location_id = al.location_id"
+      }
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "ob.person_id"
+    },
+    {
+      "type": "derived_column",
+      "alias": "established",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.value_coded = 12106, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "not_established",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.value_coded = 12107, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "community",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.value_coded = 11932, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "facility",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(ob.value_coded = 11931, 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.concept_id in (12108, 10988)",
+        "parameterName": ""
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.obs_datetime <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "ob.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "groupBy": {
+    "groupParam": "groupByParam",
+    "columns": ["ob.person_id", "ob.concept_id"],
+    "excludeParam": "excludeParam"
+  }
+}

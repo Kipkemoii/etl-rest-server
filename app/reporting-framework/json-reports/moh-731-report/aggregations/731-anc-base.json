@@ -1,0 +1,162 @@
+{
+  "name": "anc731Base",
+  "version": "1.0",
+  "tag": "",
+  "description": "",
+  "uses": [],
+  "sources": [
+    {
+      "table": "amrs.obs",
+      "alias": "o"
+    }
+  ],
+  "columns": [
+    {
+      "type": "simple_column",
+      "alias": "person_id",
+      "column": "o.person_id"
+    },
+    {
+      "type": "derived_column",
+      "alias": "known_positive_1st_anc",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10407, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "initial_test_anc",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10434, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "retest_anc",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10200, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "initial_test_LD",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = '', 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "retest_LD",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = '', 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "initial_test_pnc_less_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10434, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "retest_pnc_less_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10200, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "initial_test_pnc_greater_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10434, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "retest_pnc_greater_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.value_coded = 10200, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "positive_anc",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.concept_id = 1357 AND o.value_coded = 703, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "positive_LD",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.concept_id = 1357 AND o.value_coded = 703, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "positive_pnc_less_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.concept_id = 10449 AND o.value_coded = 703, 1, NULL)"
+      }
+    },
+    {
+      "type": "derived_column",
+      "alias": "positive_pnc_greater_6_weeks",
+      "expressionType": "simple_expression",
+      "expressionOptions": {
+        "expression": "if(o.concept_id = 10450 AND o.value_coded = 703, 1, NULL)"
+      }
+    }
+  ],
+  "filters": {
+    "conditionJoinOperator": "and",
+    "conditions": [
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "o.concept_id in (12019, 1040, 1357, 10449, 10450)"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "o.obs_datetime >= ?",
+        "parameterName": "startDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "o.obs_datetime <= ?",
+        "parameterName": "endDate"
+      },
+      {
+        "filterType": "tableColumns",
+        "conditionExpression": "o.location_id in ?",
+        "parameterName": "locations"
+      }
+    ]
+  },
+  "groupBy": {
+    "groupParam": "groupByParam",
+    "columns": ["o.person_id", "o.concept_id"],
+    "excludeParam": "excludeParam"
+  },
+  "orderBy": {
+    "orderByParam": "orderByParam",
+    "columns": [
+      {
+        "column": "obs_datetime",
+        "order": "desc"
+      }
+    ]
+  }
+}
