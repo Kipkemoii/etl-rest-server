@@ -263,6 +263,18 @@
         ]
       },
       {
+        "uuid": "92e0e4da-5013-4a39-89ca-f7ee7e1e979a",
+        "name": "HIV Age Friendly Visit",
+        "allowedIf": "age >= 50",
+        "message": "Patient has to be 50 years and above",
+        "encounterTypes": [
+          {
+            "uuid": "6c1ff48e-acb6-45a3-946c-c89c99cfc395",
+            "display": "AGEFRIENDLYPRIORITIZATION"
+          }
+        ]
+      },
+      {
         "uuid": "18faa058-4eea-4339-a959-84b3e5cb30be",
         "name": "Pediatric HIV Initial Visit ",
         "allowedIf": "age <= 14 && programLocation === intendedVisitLocationUuid && isFirstAMPATHHIVVisit",
@@ -2591,54 +2603,6 @@
         ]
       },
       {
-        "uuid": "a503d434-be01-47e2-922b-2c6daa456404",
-        "name": "Study PrEP Return Visit",
-        "allowedIf": "!isFirstPrEPVisit && isPrepStudyType",
-        "message": "Patient must have a prior clinical encounter.",
-        "encounterTypes": [
-          {
-            "uuid": "a44ad5e2-b3ec-42e7-8cfa-8ba3dbcf5ed7",
-            "display": "HIVTRIAGE"
-          },
-          {
-            "uuid": "ddd96f1c-524f-4caa-81a6-1a6f9789a4bc",
-            "display": "STUDYPREPRETURN"
-          },
-          {
-            "uuid": "df55584c-1350-11df-a1f1-0026b9348838",
-            "display": "DEATHREPORT"
-          },
-          {
-            "uuid": "1469e5fe-ad76-4041-9aa7-650e6afbe3a1",
-            "display": "DERMATOLOGYREFERRAL"
-          },
-          {
-            "uuid": "ae35ed69-e07c-4209-93ce-f23733aa816b",
-            "display": "FAMILYSTATUS"
-          },
-          {
-            "uuid": "df5547bc-1350-11df-a1f1-0026b9348838",
-            "display": "OUTREACHFIELDFU"
-          },
-          {
-            "uuid": "466d6707-8429-4e61-b5a0-d63444f5ad35",
-            "display": "COVIDSCREENING"
-          },
-          {
-            "uuid": "afabceae-61d4-42b6-8f6a-fff48a7797ea",
-            "display": "COVIDCASEREPORTING"
-          },
-          {
-            "uuid": "a393699f-8e99-4727-81c3-873873022dd8",
-            "display": "MOBILITYSCREENING"
-          },
-          {
-            "uuid": "5b1ef308-ed8f-4a86-88a0-c29a30246740",
-            "display": "HIVCLINICALREFERRAL"
-          }
-        ]
-      },
-      {
         "uuid": "06eca2a8-1da9-4ac4-95c6-15afedd4de21",
         "name": "HIV Lab Visit",
         "encounterTypes": [
@@ -2836,6 +2800,18 @@
           {
             "uuid": "2226e81f-38fc-4672-a615-1d37e1c8e637",
             "display": "ADHERENCE"
+          }
+        ]
+      },
+      {
+        "uuid": "92e0e4da-5013-4a39-89ca-f7ee7e1e979a",
+        "name": "HIV Age Friendly Visit",
+        "allowedIf": "age >= 50",
+        "message": "Patient has to be 50 years and above",
+        "encounterTypes": [
+          {
+            "uuid": "6c1ff48e-acb6-45a3-946c-c89c99cfc395",
+            "display": "AGEFRIENDLYPRIORITIZATION"
           }
         ]
       },
@@ -4711,6 +4687,18 @@
           {
             "uuid": "37770eca-8a2f-48d6-b3c8-54af0fa989c2",
             "display": "MENTALHEALTHSCREENING"
+          }
+        ]
+      },
+      {
+        "uuid": "92e0e4da-5013-4a39-89ca-f7ee7e1e979a",
+        "name": "HIV Age Friendly Visit",
+        "allowedIf": "age >= 50",
+        "message": "Patient has to be 50 years and above",
+        "encounterTypes": [
+          {
+            "uuid": "6c1ff48e-acb6-45a3-946c-c89c99cfc395",
+            "display": "AGEFRIENDLYPRIORITIZATION"
           }
         ]
       },
