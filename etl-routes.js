@@ -6616,6 +6616,39 @@ module.exports = (function () {
         notes: "Returns a location's service queue",
         tags: ['api']
       }
+    },
+    {
+      method: 'GET',
+      path: '/etl/pt4a',
+      config: {
+        auth: 'simple',
+        plugins: {
+          hapiAuthorization: {
+            role: privileges.canViewClinicDashBoard
+          }
+        },
+        handler: async function (request, reply) {
+          console.log(request);
+          const peerId = await dao.getPeerId(request);
+          const summary = await dao.getPt4aPeerPatients(request, peerId);
+
+          if (summary.result && summary.result.length > 0) {
+            const transformed = etlHelpers.transformMedicalRefillToClinical(
+              summary.result
+            );
+            summary.result = transformed;
+          }
+          reply(summary);
+        },
+        description: 'Get pt4a peer patients',
+        notes: 'Returns a list of Pt4a Peer patients ',
+        tags: ['api'],
+        validate: {
+          options: {
+            allowUnknown: true
+          }
+        }
+      }
     }
   ];
 

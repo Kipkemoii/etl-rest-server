@@ -759,6 +759,94 @@ module.exports = (function () {
     });
   }
 
+  function getPeerId(request) {
+    return new Promise(function (resolve, reject) {
+      const uuid = request.query.uuid;
+      const whereClause = [`t1.uuid = '${uuid}'`];
+
+      // Step 1: Get person_id using uuid
+      const queryParts = {
+        columns: request.query.fields || `person_id`,
+        table: 'amrs.users',
+        where: whereClause
+      };
+      db.queryDb(queryParts)
+        .then((data) => {
+          if (data.result && data.result.length > 0) {
+            const creatorId = data.result[0].user_id;
+            resolve(creatorId);
+          } else {
+            resolve(null);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  function getPt4aPeerPatients(request, peerId) {
+    return new Promise(function (resolve, reject) {
+      console.log('PEER ID: ' + peerId);
+      const whereClause = [
+        `r.person_a = ${peerId} AND r.relationship = 22 AND r.voided = 0`
+      ];
+      const queryParts = {
+        columns:
+          request.query.fields ||
+          `t1.patient_id, pe.uuid patient_uuid,pi.identifier,t1.creator, CONCAT_WS(' ', pn.given_name, pn.middle_name, pn.family_name) AS name, max(if(o.concept_id=10241,(case  
+                when o.value_coded = 2272 then "AMLODIPINE" 
+                when o.value_coded = 11968 then "AMLODIPINE/LOSARTAN" 
+                when o.value_coded = 2267 then "ATENOLOL" 
+                when o.value_coded = 2276 then "ATORVASTATIN" 
+                when o.value_coded = 10050 then "CANDESARTAN" 
+                when o.value_coded = 2268 then "CARVEDILOL 6.25mg TAB" 
+                when o.value_coded = 8171 then "CLOPIDOGREL 75mg TAB" 
+                when o.value_coded = 8172 then "DIGOXIN 0.25mg TAB" 
+                when o.value_coded = 1241 then "ENALAPRIL 10mg TAB" 
+                when o.value_coded = 9205 then "FELODIPINE" 
+                when o.value_coded = 11414 then "LOSARTAN / HYDROCHLOROTHIAZIDE" 
+                when o.value_coded = 7303 then "JUNIOR ASPIRIN" 
+                when o.value_coded = 99 then "FUROSEMIDE" 
+                when o.value_coded = 8836 then "LISINOPRIL AND HYDROCLOROTHIAZIDE" 
+                when o.value_coded = 2265 then "LOSARTAN" 
+                when o.value_coded = 11414 then "LOSARTAN / HYDROCHLOROTHIAZIDE" 
+                when o.value_coded = 2266 then "METOPROLOL" 
+                when o.value_coded = 250 then "NIFEDIPINE" 
+                when o.value_coded = 254 then "PROPRANOLOL" 
+                when o.value_coded = 11971 then "ROSUVASTATIN" 
+                when o.value_coded = 2269 then "SPIRONOLACTONE" 
+                when o.value_coded = 10049 then "TELMISARTAN" 
+                else "" end),null)) as drug,
+                max(if(o.concept_id=5096,DATE_FORMAT(o.value_datetime, '%Y-%m-%d'),null)) as tca`,
+        table: 'amrs.patient',
+        where: whereClause,
+        group: ['t1.patient_id'],
+        order: [
+          {
+            column: 'tca',
+            asc: true
+          }
+        ],
+        leftOuterJoins: [
+          ['amrs.person_name', 'pn', 'pn.person_id = t1.patient_id'],
+          ['amrs.obs', 'o', 'o.person_id = t1.patient_id'],
+          ['amrs.person', 'pe', 'pe.person_id = t1.patient_id'],
+          ['amrs.patient_identifier', 'pi', 'pi.patient_id = t1.patient_id'],
+          ['amrs.relationship', 'r', 'r.person_b = t1.patient_id']
+        ]
+      };
+
+      db.queryDb(queryParts)
+        .then(function (data) {
+          resolve(data.result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   return {
     getPatientHivSummary: getPatientHivSummary,
     getPatientOncologySummary: getPatientOncologySummary,
@@ -770,6 +858,8 @@ module.exports = (function () {
     getPatientCountGroupedByLocation: getPatientCountGroupedByLocation,
     getPatientDetailsGroupedByLocation: getPatientDetailsGroupedByLocation,
     getHivNegativesPatientSummary: getHivNegativesPatientSummary,
-    getPatientsLatestHivSummmary: getPatientsLatestHivSummmary
+    getPatientsLatestHivSummmary: getPatientsLatestHivSummmary,
+    getPt4aPeerPatients: getPt4aPeerPatients,
+    getPeerId: getPeerId
   };
 })();
