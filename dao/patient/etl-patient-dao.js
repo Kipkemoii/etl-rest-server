@@ -773,8 +773,8 @@ module.exports = (function () {
       db.queryDb(queryParts)
         .then((data) => {
           if (data.result && data.result.length > 0) {
-            const creatorId = data.result[0].user_id;
-            resolve(creatorId);
+            const peerId = data.result[0].person_id;
+            resolve(peerId);
           } else {
             resolve(null);
           }
