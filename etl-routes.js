@@ -6719,7 +6719,7 @@ module.exports = (function () {
       method: 'POST',
       path: '/verify-otp',
       config: {
-        auth: 'simple',
+        auth: 'default',
         handler: async function (request, reply) {
           const otpStore = new OtpStore();
           const { username, otp } = request.payload || {};
@@ -6747,7 +6747,7 @@ module.exports = (function () {
       method: 'GET',
       path: '/superset-token',
       config: {
-        auth: 'simple',
+        auth: 'default',
         handler: async function (request, reply) {
           const locationUuid = request.query.locationUuid;
           const supersetService = new SupersetService();
